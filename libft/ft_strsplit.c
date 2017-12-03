@@ -3,38 +3,61 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strsplit.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sjones <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: rlevine <rlevine@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/01/11 19:46:34 by sjones            #+#    #+#             */
-/*   Updated: 2017/01/20 15:18:41 by sjones           ###   ########.fr       */
+/*   Created: 2017/07/02 17:41:20 by rlevine           #+#    #+#             */
+/*   Updated: 2017/07/02 17:46:26 by rlevine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	**ft_strsplit(char const *s, char c)
+static	int		ft_wordcount(char const *s, char c)
 {
-	char	**ret;
-	char	*t;
-	int		i;
+	int		prev;
+	int		count;
 
-	if (s != NULL)
+	prev = 0;
+	count = 0;
+	while (*s)
 	{
-		i = 0;
-		t = (char*)s;
-		if (!(ret = (char**)malloc(sizeof(char*) * ft_wordcnt(s, c) + 1)))
-			return (NULL);
-		while (*t && (i < ft_wordcnt(s, c)))
+		if (prev == 1 && c == *s)
+			prev = 0;
+		if (prev == 0 && c != *s)
 		{
-			while (*t == c)
-				t++;
-			if (!(ret[i++] = ft_strndup(t, ft_wordlen(t, c))))
-				return (NULL);
-			while (*t != c)
-				t++;
+			prev = 1;
+			count++;
 		}
-		ret[i] = NULL;
-		return (ret);
+		s++;
 	}
-	return (NULL);
+	return (count);
+}
+
+char			**ft_strsplit(char const *s, char c)
+{
+	int		sholder;
+	char	**new_s;
+	int		i;
+	int		j;
+	int		begin;
+
+	i = 0;
+	j = -1;
+	if (s == 0 || c == 0)
+		return (NULL);
+	sholder = ft_wordcount(s, c);
+	if (!(new_s = malloc((sizeof(char*) * (sholder + 1)))))
+		return (NULL);
+	while (++j < sholder)
+	{
+		while (s[i] && s[i] == c)
+			i++;
+		begin = i;
+		while (s[i] && s[i] != c)
+			i++;
+		new_s[j] = malloc(sizeof(char*) * ((i - begin) + 1));
+		new_s[j] = ft_strsub(s, begin, i - begin);
+	}
+	new_s[j] = NULL;
+	return (new_s);
 }

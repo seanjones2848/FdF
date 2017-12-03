@@ -1,31 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_wordlen.c                                       :+:      :+:    :+:   */
+/*   put_to_center.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sjones <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: sjones <sjones@student.42.us.org>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/01/11 20:08:45 by sjones            #+#    #+#             */
-/*   Updated: 2017/11/08 16:05:24 by sjones           ###   ########.fr       */
+/*   Created: 2017/11/08 16:52:10 by sjones            #+#    #+#             */
+/*   Updated: 2017/11/08 16:52:11 by sjones           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "fdf.h"
 
-int		ft_wordlen(const char *s, char c)
+void	put_to_center(t_super *s)
 {
-	char	*t;
-	int		r;
-
-	if (s != NULL)
-	{
-		r = 0;
-		t = (char*)s;
-		while (*t == c)
-			t++;
-		while (t[r] != c)
-			r++;
-		return (r);
-	}
-	return (0);
+	zoom(0.8 * (MIN(s->win->w / s->map->w, s->win->h / s->map->h)), s->map);
+	rotate('z', 1, PI, s->map);
+	rotate('y', -1, 5 * PI / 6, s->map);
+	rotate('x', -1, PI / 6, s->map);
 }
